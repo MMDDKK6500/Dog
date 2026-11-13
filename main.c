@@ -10,23 +10,15 @@ int main(int argc, char **argv) {
 
 	// Probably can use local variables instead of function global ones but eh
 
-	// non initialized vars
-
+	const char *path = ".";
 	char input[128]; // Input for line number
-
 	char curLineNum[32] = {}; // current line number in text
 	ssize_t readReturn; // The size of what's returned from read
 	char text[4096]; // text chunk
 	int fd; // the file descriptor of the selected path
-	
 	int showLineNum = 0; // should show line number flag
-
 	int linesInFile = 1; // where lines start
-
-	int howMuch = 0;
-	
-	// initialized ones
-	const char *path = ".";
+	int howMuch = 0; // how many lines to show
 
 	// TODO: Make and argument parser nd use that to learn header files
 
@@ -53,6 +45,7 @@ int main(int argc, char **argv) {
 
 	if (argc >= 4) {
 		strlcpy(input, argv[3], sizeof(input)); 
+		howMuch = strtol(input, NULL, 10);
 		//printf("%s", input);
 		//input = argv[2];
 	} else {
@@ -69,7 +62,7 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 
-		printf("%d\n", howMuch);
+		//printf("%d\n", howMuch);
 	}
 
 	
@@ -84,7 +77,7 @@ int main(int argc, char **argv) {
 	if (howMuch == 0) {
 		// if (argc < 3) {
 			printf("Not a number!\n");
-			//printf("errno: %d\n", errno);
+			printf("errno: %d\n", errno);
 			return 1;
 		// }
 		howMuch = -1;
@@ -160,6 +153,11 @@ int main(int argc, char **argv) {
 			break;
 		}
 
+	}
+
+	// If reached EOL, remove 1 from total line count
+	if (readReturn == 0) {
+		linesInFile--;
 	}
 
 	printf("That was %d new lines!\n", linesInFile);
