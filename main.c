@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <sys/errno.h>
 
-
 int main(int argc, char **argv) {
 
 	// Probably can use local variables instead of function global ones but eh
@@ -23,6 +22,8 @@ int main(int argc, char **argv) {
 	int showLineNum = 0; // should show line number flag
 
 	int linesInFile = 1; // where lines start
+
+	int howMuch = 0;
 	
 	// initialized ones
 	const char *path = ".";
@@ -57,14 +58,25 @@ int main(int argc, char **argv) {
 	} else {
 		printf("How many lines to show: ");
 		// Handle this error ig? man says need of use of feof and ferror but too lazy rn need sleep
-		char* getResponse = fgets(input, sizeof input, stdin);	
+		// forget fgets or gets, use scanf!!!
+		//char* getResponse = fgets(input, sizeof input, stdin);	
+
+		int response = scanf("%d", &howMuch);
+		
+		if (response <= 0 ) {
+			printf("Not a number!\n");
+			printf("errno: %d\n", errno);
+			return 1;
+		}
+
+		printf("%d\n", howMuch);
 	}
 
 	
 	//char* getResponse = fgets(input, sizeof(input), stdin);
 
 	// check to see if it is a number
-	long howMuch = strtol(input, NULL, 10);
+	//long howMuch = strtol(input, NULL, 10);
 	
 	// printf("%ld\n", howMuch);
 	
